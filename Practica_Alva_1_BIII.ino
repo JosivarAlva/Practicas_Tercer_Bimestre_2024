@@ -1,3 +1,29 @@
+
+/* 
+
+   Fundacion Kinal
+
+   Centro educativo tecnico laboral Kinal
+
+   Quinto perito
+
+   Quinto electronica
+
+   Codigo Tecnico: EB5AM / EB5AV 
+
+   Curso: Taller de electronica digital y reparacion de computadoras I
+
+   Proyecto: Practica No. 1 3er Bimestre
+
+   Dev: Josivar Sebastian Rayjam Alva López
+
+   Fecha: 20 de junio.
+
+   link de la simulacion: https:
+
+   */
+ 
+
 #include <Adafruit_NeoPixel.h>
 
 // Enumeración de colores
