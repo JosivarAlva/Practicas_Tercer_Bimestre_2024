@@ -7,7 +7,7 @@
    Curso: Taller de electronica digital y reparacion de computadoras I
    Proyecto: Practica No. 1 3er Bimestre
    Dev: Josivar Sebastian Rayjam Alva López
-   Fecha: 20 de junio.
+   Fecha: 15 de julio.
    link de la simulacion: https:
  */
 
