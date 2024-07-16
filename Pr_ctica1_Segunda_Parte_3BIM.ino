@@ -13,15 +13,27 @@
 
 #include <LiquidCrystal_I2C.h>
 #include <Wire.h>
- 
-// pantalla lcd con I2C
+#define IN1  12
+#define IN2  11
+#define IN3  10
+#define IN4  9
+#define adc A0
+#define Obstacles 3
+#define hall 4
 #define direccion_lcd 0x27
 #define filas 2
 #define columnas 16
+#define tiempo delay(1000);
  
-bool estadoSensorHall;
+LiquidCrystal_I2C led(direccion_lcd, columnas, filas);
  
-bool estadoSensorObstaculos;
+bool state_sensor1;  
+ 
+bool state_sensor2;
+ 
+unsigned int valor_adc_pot;
+ 
+unsigned char velocidad;
  
 int paso [8][4] =
 {
@@ -35,70 +47,71 @@ int paso [8][4] =
   {1, 0, 0, 1}
 };
  
-LiquidCrystal_I2C LCD(direccion_lcd, columnas, filas);
- 
-int contador_revoluciones = 0;
- 
-unsigned int velocidad_adc;
- 
-unsigned char velocidad;
- 
 void setup()
 {
-  LCD.init();
-  LCD.backlight();
-  LCD.setCursor(0, 0);
-  LCD.print("Contador de rev.");
-  LCD.setCursor(0, 1);
-  LCD.print("No. de Rev: 0");
- 
-  pinMode(12, OUTPUT);
-  pinMode(11, OUTPUT);
-  pinMode(10, OUTPUT);
-  pinMode(9, OUTPUT);
- 
-  pinMode(A0, INPUT);
-         
-  pinMode(4, INPUT);
- 
-  pinMode(3, INPUT);
-}
- 
-void loop() {
-  estadoSensorObstaculos = digitalRead(3);
- 
-  if(estadoSensorObstaculos == LOW){
-    medicion_adc();
-    for (int i = 0; i < 8; i++)
-    {
-      digitalWrite(12, paso[i][0]);
-      digitalWrite(11, paso[i][1]);
-      digitalWrite(10, paso[i][2]);
-      digitalWrite(9, paso[i][3]);
-      delay(velocidad);
-    }
- 
-    estadoSensorHall = digitalRead(4);
-   
-    if(estadoSensorHall == LOW){
-      medicion_rev_lcd();
-      delay(1000);
-    }
+  Serial.begin(9600);
+  led.init();
+  led.backlight();
+  led.setCursor(0, 0);
+  led.print("Contador de rev.");
+  led.setCursor(0, 1);
+  led.print("No. de rev:0");
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+  pinMode(adc, INPUT);        
+  pinMode(Obstacles, INPUT);
+  pinMode(hall, INPUT);
+  if(state_sensor1 == HIGH){
+    lcdSicajan.clear();
+      lcdSicajan.setCursor(0, 0);
+      lcdSicajan.print("Contador de rev.");
+      lcdSicajan.setCursor(0, 1);
+      lcdSicajan.print("No. de rev: ");
+      lcdSicajan.print(0);
   }
 }
  
-void medicion_adc(){
-  velocidad_adc = analogRead(A0);    
-  velocidad = map(velocidad_adc,0,1023,0,10);
-}
+void loop()
+{
+  state_sensor1 = digitalRead(Obstacles);
+  state_sensor2 = digitalRead(hall);  
+  valor_adc_pot = analogRead(adc);    
+  velocidad = map(valor_adc_pot,0,1023,0,10);    
+  Serial.print("El valor leido por el ADC es de: ");
+  Serial.println(valor_adc_pot);
  
-int medicion_rev_lcd(){
-  contador_revoluciones = contador_revoluciones+1;
-  LCD.clear();
-  LCD.setCursor(0, 0);
-  LCD.print("Contador de rev.");
-  LCD.setCursor(0, 1);
-  LCD.print("No. de rev: ");
-  LCD.setCursor(13, 1);
-  LCD.print(contador_revoluciones);
+  if(state_sensor1 == LOW){
+    for (int i = 0; i < 8; i++)
+    {
+      digitalWrite(IN1, paso[i][0]);
+      digitalWrite(IN2, paso[i][1]);
+      digitalWrite(IN3, paso[i][2]);
+      digitalWrite(IN4, paso[i][3]);
+      delay(velocidad);
+    }
+    if(state_sensor2 == LOW){
+      if(valor_adc_pot > 100 && valor_adc_pot <508){
+      led.setCursor(11, 1);
+      led.print("5RPM");
+     
+      }
+      if(valor_adc_pot > 509 && valor_adc_pot <764){      
+      led.setCursor(11, 1);
+      led.print("4RPM");
+     
+      }
+      if(valor_adc_pot > 765 && valor_adc_pot < 1023){
+      led.setCursor(11, 1);
+      led.print("2RPM");
+     
+      }
+    }
+    else{
+      led.setCursor(11, 1);
+      led.print(0);
+ 
+    }
+  }
 }
