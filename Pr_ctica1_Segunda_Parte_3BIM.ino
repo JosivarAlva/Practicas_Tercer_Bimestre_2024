@@ -65,11 +65,11 @@ void setup()
   pinMode(hall, INPUT);
   if(state_sensor1 == HIGH){
     lcdSicajan.clear();
-      lcdSicajan.setCursor(0, 0);
-      lcdSicajan.print("Contador de rev.");
-      lcdSicajan.setCursor(0, 1);
-      lcdSicajan.print("No. de rev: ");
-      lcdSicajan.print(0);
+      led.setCursor(0, 0);
+      led.print("Contador de rev.");
+      led.setCursor(0, 1);
+      led.print("No. de rev: ");
+      led.print(0);
   }
 }
  
