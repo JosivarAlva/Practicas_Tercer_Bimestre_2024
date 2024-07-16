@@ -52,14 +52,14 @@ void setup()
   LCD.setCursor(0, 1);
   LCD.print("No. de Rev: 0");
  
-  pinMode(7, OUTPUT);
-  pinMode(6, OUTPUT);
-  pinMode(5, OUTPUT);
-  pinMode(4, OUTPUT);
+  pinMode(12, OUTPUT);
+  pinMode(11, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(9, OUTPUT);
  
   pinMode(A0, INPUT);
          
-  pinMode(2, INPUT);
+  pinMode(4, INPUT);
  
   pinMode(3, INPUT);
 }
@@ -71,14 +71,14 @@ void loop() {
     medicion_adc();
     for (int i = 0; i < 8; i++)
     {
-      digitalWrite(7, paso[i][0]);
-      digitalWrite(6, paso[i][1]);
-      digitalWrite(5, paso[i][2]);
-      digitalWrite(4, paso[i][3]);
+      digitalWrite(12, paso[i][0]);
+      digitalWrite(11, paso[i][1]);
+      digitalWrite(10, paso[i][2]);
+      digitalWrite(9, paso[i][3]);
       delay(velocidad);
     }
  
-    estadoSensorHall = digitalRead(2);
+    estadoSensorHall = digitalRead(4);
    
     if(estadoSensorHall == LOW){
       medicion_rev_lcd();
